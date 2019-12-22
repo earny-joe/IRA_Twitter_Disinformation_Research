@@ -5,6 +5,7 @@ import tweepy
 import time
 import pandas as pd
 from pathlib import Path
+from datetime import datetime
 
 def set_path():
     '''
@@ -90,29 +91,21 @@ def get_tweets(path, user, key, secret_key, token, token_secret):
     # call Twitter API
     api = tweepy.API(auth_handler=auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
-    # create tweepy.Cursor object
-    cursor = tweepy.Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items()
-    
-    while True:
-        try:
-            tweet = cursor.next()
-            csv_writer.writerow(
-                [
-                    tweet.id_str,
-                    tweet.user.screen_name,
-                    tweet.created_at,
-                    tweet.lang, 
-                    tweet.source,
-                    tweet.retweet_count,
-                    tweet.favorite_count,
-                    is_retweet(tweet),
-                    tweet.full_text
-                ]
-            )
-        except tweepy.TweepError as e:
-            print(e)
-            time.sleep(60 * 15)
-            continue
+    # get Tweets
+    for tweet in tweepy.Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items():
+        csv_writer.writerow(
+            [
+                tweet.id_str,
+                tweet.user.screen_name,
+                tweet.created_at,
+                tweet.lang,
+                tweet.source,
+                tweet.retweet_count,
+                tweet.favorite_count,
+                is_retweet(tweet),
+                tweet.full_text
+            ]
+        )
             
     # close csv file
     csv_file.close()
