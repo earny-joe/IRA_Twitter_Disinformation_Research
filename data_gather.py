@@ -6,6 +6,7 @@ import time
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
+from tqdm import tqdm
 
 def set_path():
     '''
@@ -92,7 +93,7 @@ def get_tweets(path, user, key, secret_key, token, token_secret):
     api = tweepy.API(auth_handler=auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     
     # get Tweets
-    for tweet in tweepy.Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items():
+    for tweet in tqdm(tweepy.Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items()):
         csv_writer.writerow(
             [
                 tweet.id_str,
