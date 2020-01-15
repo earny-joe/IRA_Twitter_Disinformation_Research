@@ -64,7 +64,7 @@ def get_tweets(path, user, key, secret_key, token, token_secret):
     Function that gathers input user's Tweets and outputs them to a CSV file.
     '''
     # open new CSV file into data folder of current directory
-    csv_file = open(path/f"data/{user}.csv", "a")
+    csv_file = open(path/f"csv-data/{user}.csv", "a")
     # create CSV writer
     csv_writer = csv.writer(csv_file)
     
@@ -129,7 +129,7 @@ def main():
     get_tweets(path=path, user=user, key=API_KEY, secret_key=API_SECRET_KEY, token=ACCESS_TOKEN, token_secret=ACCESS_TOKEN_SECRET)
     
     # get length of CSV file (i.e. # of tweets gathered)
-    length = len(pd.read_csv(path/f"data/{user}.csv"))
+    length = len(pd.read_csv(path/f"csv-data/{user}.csv"))
     
     # print out length of CSV
     print("Successfully gathered {} from {}.".format(length, user))
